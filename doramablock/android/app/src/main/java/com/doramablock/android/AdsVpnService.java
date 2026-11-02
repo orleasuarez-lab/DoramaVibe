@@ -44,6 +44,8 @@ public final class AdsVpnService extends VpnService {
 
     private final AtomicBoolean running = new AtomicBoolean(false);
     private ParcelFileDescriptor tunInterface;
+    private volatile ParcelFileDescriptor readDescriptor;
+    private volatile ParcelFileDescriptor writeDescriptor;
     private Thread worker;
 
     @Override
@@ -86,7 +88,7 @@ public final class AdsVpnService extends VpnService {
             setState(true);
             worker = new Thread(this::runPacketLoop, "DoramaBlock-DNS");
             worker.start();
-            updateNotification("Filtro DNS ativo; internet normal fora do DNS");
+            updateNotification("Filtro DNS ativo; escopo IPv4/UDP");
         } catch (RuntimeException error) {
             setState(false);
             stopForeground(STOP_FOREGROUND_REMOVE);
@@ -95,17 +97,19 @@ public final class AdsVpnService extends VpnService {
     }
 
     private void runPacketLoop() {
-        ParcelFileDescriptor readDescriptor = null;
-        ParcelFileDescriptor writeDescriptor = null;
+        ParcelFileDescriptor readLocal = null;
+        ParcelFileDescriptor writeLocal = null;
 
         try {
-            readDescriptor = ParcelFileDescriptor.dup(tunInterface.getFileDescriptor());
-            writeDescriptor = ParcelFileDescriptor.dup(tunInterface.getFileDescriptor());
+            readLocal = ParcelFileDescriptor.dup(tunInterface.getFileDescriptor());
+            readDescriptor = readLocal;
+            writeLocal = ParcelFileDescriptor.dup(tunInterface.getFileDescriptor());
+            writeDescriptor = writeLocal;
 
             try (FileInputStream input =
-                         new FileInputStream(readDescriptor.getFileDescriptor());
+                         new FileInputStream(readLocal.getFileDescriptor());
                  FileOutputStream output =
-                         new FileOutputStream(writeDescriptor.getFileDescriptor())) {
+                         new FileOutputStream(writeLocal.getFileDescriptor())) {
 
                 byte[] packetBuffer = new byte[32767];
 
@@ -129,7 +133,7 @@ public final class AdsVpnService extends VpnService {
                     if (DomainBlocklist.isBlocked(domain)) {
                         dnsResponse = DnsPacket.buildDnsErrorResponse(dnsQuery, 3); // NXDOMAIN.
                         incrementCounter(PREF_BLOCKED);
-                        updateNotification("Domínios bloqueados: " + getCount(PREF_BLOCKED));
+                        updateNotification("Consultas bloqueadas: " + getCount(PREF_BLOCKED));
                     } else {
                         dnsResponse = forwardDns(dnsQuery);
                         if (dnsResponse == null || dnsResponse.length == 0) {
@@ -154,8 +158,14 @@ public final class AdsVpnService extends VpnService {
                 stopSelf();
             }
         } finally {
-            closeQuietly(readDescriptor);
-            closeQuietly(writeDescriptor);
+            closeQuietly(readLocal);
+            closeQuietly(writeLocal);
+            if (readDescriptor == readLocal) {
+                readDescriptor = null;
+            }
+            if (writeDescriptor == writeLocal) {
+                writeDescriptor = null;
+            }
             if (running.get()) {
                 running.set(false);
                 setState(false);
@@ -165,7 +175,7 @@ public final class AdsVpnService extends VpnService {
     }
 
     private byte[] forwardDns(byte[] query) {
-        if (query == null || query.length == 0) {
+        if (query == null || query.length < 12) {
             return null;
         }
 
@@ -186,6 +196,18 @@ public final class AdsVpnService extends VpnService {
                     new DatagramPacket(responseBuffer, responseBuffer.length);
             socket.receive(incoming);
 
+            if (!resolver.equals(incoming.getAddress())
+                    || incoming.getPort() != 53
+                    || incoming.getLength() < 12) {
+                return null;
+            }
+
+            // Match the DNS transaction ID so an unrelated UDP response is ignored.
+            if (incoming.getData()[incoming.getOffset()] != query[0]
+                    || incoming.getData()[incoming.getOffset() + 1] != query[1]) {
+                return null;
+            }
+
             byte[] response = new byte[incoming.getLength()];
             System.arraycopy(incoming.getData(), incoming.getOffset(),
                     response, 0, incoming.getLength());
@@ -201,6 +223,11 @@ public final class AdsVpnService extends VpnService {
             worker.interrupt();
             worker = null;
         }
+        // Close the duplicated TUN descriptors too; this wakes a worker blocked on read().
+        closeQuietly(readDescriptor);
+        readDescriptor = null;
+        closeQuietly(writeDescriptor);
+        writeDescriptor = null;
         closeQuietly(tunInterface);
         tunInterface = null;
         setState(false);
@@ -287,7 +314,7 @@ public final class AdsVpnService extends VpnService {
             try {
                 descriptor.close();
             } catch (IOException ignored) {
-                // Descriptor may already have been closed by its stream.
+                // Descriptor may already have been closed by the stream.
             }
         }
     }
