@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090d18">
+<meta name="description" content="DoramaBlock — painel de projeto para proteção de anúncios no Android.">
+<title>DoramaBlock | Proteção inteligente</title>
+<style>
+:root{color-scheme:dark;--bg:#090d18;--panel:#111a2b;--panel2:#172238;--line:#263653;--text:#f2f6ff;--muted:#9eacc5;--mint:#55e0b0;--blue:#73a7ff;--red:#ff7c8a;--gold:#f4c86b}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 80% -15%,#1a3653 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+header{position:sticky;top:0;z-index:5;background:#090d18eF;backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px clamp(16px,4vw,48px);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.brand{font-weight:900;font-size:22px;letter-spacing:-.8px}.brand span{color:var(--mint)}
+.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px;font-weight:700}
+.wrap{max-width:1120px;margin:auto;padding:26px 16px 70px}
+.hero{border:1px solid #315174;border-radius:26px;padding:clamp(22px,5vw,42px);background:linear-gradient(115deg,#132d43,#142039 60%,#19243d);position:relative;overflow:hidden}
+.eyebrow{font-size:11px;letter-spacing:2px;font-weight:800;color:var(--mint)}
+h1{font-size:clamp(34px,7vw,58px);line-height:1.02;letter-spacing:-2px;margin:12px 0}
+.hero p{max-width:650px;color:#c1cee2;margin:0 0 20px}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:10px 15px;font-weight:750}
+.btn.primary{background:var(--mint);border-color:var(--mint);color:#062018}
+.btn:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+.status{display:inline-flex;align-items:center;gap:8px;color:var(--mint);font-size:12px;font-weight:800}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px #55e0b080}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:16px}
+.card{background:linear-gradient(160deg,var(--panel),#0e1625);border:1px solid var(--line);border-radius:18px;padding:18px;min-width:0}
+.span8{grid-column:span 8}.span4{grid-column:span 4}.span12{grid-column:span 12}
+.card h2{font-size:17px;margin:0 0 5px}.muted{color:var(--muted)}
+.master{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.master strong{font-size:22px;display:block}
+.switch{width:58px;height:32px;border:1px solid #52617b;border-radius:99px;background:#27344a;padding:3px;flex:none}
+.switch i{display:block;width:24px;height:24px;border-radius:50%;background:#aab6c8;transition:transform .2s}
+.switch[aria-checked=true]{background:#145b48;border-color:var(--mint)}
+.switch[aria-checked=true] i{transform:translateX(25px);background:var(--mint)}
+.meter{height:10px;background:#25324a;border-radius:99px;overflow:hidden;margin:14px 0 7px}
+.meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,#4dbb9b,#8be6c5);border-radius:99px;transition:width .25s}
+.metric{font-size:32px;font-weight:900;letter-spacing:-1px}
+.metric small{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:0}
+.module-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:24px 0 12px}
+.module-head h2{margin:0;font-size:22px}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+input[type=search]{min-width:180px;background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:9px 12px}
+.modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.module{display:flex;align-items:flex-start;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px}
+.module .ico{width:36px;height:36px;border-radius:11px;background:#20344b;display:grid;place-items:center;color:var(--mint);font-size:17px;flex:none}
+.module h3{font-size:14px;margin:0 0 3px}.module p{font-size:12px;color:var(--muted);margin:0}
+.module input{margin-left:auto;accent-color:var(--mint);width:18px;height:18px;flex:none}
+.module.off{opacity:.55}
+.notice{border-left:3px solid var(--gold);background:#2a2518;padding:13px 15px;border-radius:8px;color:#e7d9b5;font-size:13px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.step{padding:14px;border-radius:14px;background:var(--panel2);border:1px solid var(--line)}
+.step b{display:block;margin-bottom:5px}.step small{color:var(--muted)}
+footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:var(--muted);font-size:12px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#183b32;border:1px solid #327c66;color:#d7fff0;padding:10px 15px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@media(max-width:720px){.span8,.span4{grid-column:span 12}.master{align-items:flex-start}.metric{font-size:27px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Dorama<span>Block</span><small>PROTEÇÃO INTELIGENTE</small></div>
+  <div class="status"><i class="dot"></i> PAINEL DE DESENVOLVIMENTO</div>
+</header>
+<main class="wrap">
+<section class="hero">
+  <div class="eyebrow">INTERNET LIGADA. FILTROS ATIVOS.</div>
+  <h1>Menos anúncios.<br>Mais controle.</h1>
+  <p>O DoramaBlock está sendo planejado como um bloqueador Android com filtragem local, regras DNS e proteção configurável. Este painel é a prévia visual do projeto — ele ainda não filtra o tráfego do seu celular.</p>
+  <button class="btn primary" id="goModules">Configurar proteções ↓</button>
+</section>
+
+<section class="grid" aria-label="Resumo da proteção">
+  <article class="card span8">
+    <div class="master">
+      <div>
+        <div class="status"><i class="dot" id="masterDot"></i><span id="masterState">MODO DE DEMONSTRAÇÃO</span></div>
+        <strong>Proteção Total</strong>
+        <div class="muted" id="masterDescription">Ative os módulos para simular sua configuração.</div>
+      </div>
+      <button class="switch" id="masterSwitch" role="switch" aria-checked="false" aria-label="Ativar todos os módulos"><i></i></button>
+    </div>
+    <div class="meter"><span id="meterFill"></span></div>
+    <div class="muted" id="moduleCount">0 de 120 regras demonstrativas selecionadas</div>
+  </article>
+  <article class="card span4">
+    <div class="muted">Meta de engenharia</div>
+    <div class="metric">100% <small>objetivo, não garantia</small></div>
+    <div class="muted">A taxa real só poderá ser calculada em testes com tráfego real.</div>
+  </article>
+  <article class="card span4">
+    <div class="muted">Módulos habilitados</div>
+    <div class="metric" id="enabledMetric">0 <small>/ 120</small></div>
+    <div class="muted">Contagem da configuração demonstrativa.</div>
+  </article>
+  <article class="card span4">
+    <div class="muted">Anúncios bloqueados</div>
+    <div class="metric">—</div>
+    <div class="muted">Sem bloqueio real nesta página.</div>
+  </article>
+  <article class="card span4">
+    <div class="muted">Conexão do celular</div>
+    <div class="metric">Online</div>
+    <div class="muted">O painel não altera sua conexão.</div>
+  </article>
+</section>
+
+<div class="module-head" id="moduleSection">
+  <div><div class="eyebrow">CENTRAL DE CONTROLE</div><h2>120 regras em 12 grupos</h2></div>
+  <div class="tools"><input type="search" id="moduleSearch" placeholder="Buscar módulo..." aria-label="Buscar módulo"><button class="btn" id="allOn">Ativar todos</button><button class="btn" id="allOff">Desativar todos</button></div>
+</div>
+<div class="modules" id="modules"></div>
+
+<section class="card" style="margin-top:18px">
+  <h2>Como a versão Android deverá funcionar</h2>
+  <p class="muted">Uma VPN local do Android pode encaminhar o tráfego para um mecanismo de filtragem. O mecanismo decide quais domínios conhecidos bloquear e quais conexões deixar passar. Uma única VPN local coordena os módulos — não 120 VPNs separadas.</p>
+  <div class="steps">
+    <div class="step"><b>1. Captura local</b><small>Android VpnService recebe o tráfego permitido pelo sistema.</small></div>
+    <div class="step"><b>2. Classificação</b><small>DNS, listas de reputação e regras identificam destinos publicitários.</small></div>
+    <div class="step"><b>3. Decisão</b><small>Bloqueia destinos identificados e permite conexões necessárias ao conteúdo.</small></div>
+    <div class="step"><b>4. Auditoria</b><small>Registra contagens, falhas e falsos positivos para melhorar as regras.</small></div>
+  </div>
+</section>
+
+<section class="notice" style="margin-top:16px">
+  <b>Limite importante:</b> anúncios servidos pelo mesmo domínio ou pela mesma conexão do vídeo podem ser indistinguíveis do conteúdo. Por isso, não é honesto prometer 100% de bloqueio em todos os aplicativos, inclusive no YouTube. A meta é maximizar o bloqueio seletivo sem quebrar o conteúdo.
+</section>
+
+<footer>
+  DoramaBlock é um projeto independente em desenvolvimento. Esta página é apenas um painel demonstrativo: não instala VPN, não altera o DNS do aparelho e não bloqueia anúncios fora dela. A versão Android precisará de código nativo, testes de segurança e permissões explícitas.
+</footer>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<script>
+"use strict";
+const groups=[
+ {name:"DNS e domínios",icon:"⌁",items:["Filtro de domínios publicitários","Bloqueio de rastreadores DNS","Proteção contra domínios recém-criados","Listas de bloqueio comunitárias","Lista de permissões personalizada","Cache DNS seguro","Proteção contra DNS adulterado","Atualização de listas","Tratamento de subdomínios","Verificação de domínios duplicados"]},
+ {name:"Publicidade",icon:"⊘",items:["Hosts de anúncios conhecidos","Redes de publicidade identificadas","Rastreadores de campanhas","Pixels de rastreamento conhecidos","Redirecionadores publicitários","Domínios de medição de anúncios","Scripts publicitários conhecidos","Solicitações de anúncios de terceiros","Publicidade em pop-ups identificáveis","Regras de publicidade por categoria"]},
+ {name:"Navegação",icon:"◎",items:["Proteção contra pop-ups compatíveis","Bloqueio de redirecionamentos suspeitos","Domínios de phishing conhecidos","Proteção contra páginas maliciosas","Filtros de scripts conhecidos","Proteção de navegação por domínio","Regras de exceção por site","Listas de reputação web","Proteção de links suspeitos","Diagnóstico de páginas quebradas"]},
+ {name:"Aplicativos",icon:"▣",items:["Regras por pacote Android","Exceções por aplicativo","Perfil de filtragem por app","Proteção de conexões em segundo plano","Relatório por aplicativo","Controle de permissões de rede","Detecção de falhas de conectividade","Regras de tráfego local","Proteção de apps selecionados","Modo compatibilidade"]},
+ {name:"Privacidade",icon:"◇",items:["Bloqueio de rastreadores conhecidos","Telemetria opcional identificada","Domínios de análise conhecidos","Proteção contra fingerprinting via domínio","Minimização de consultas DNS","Proteção contra rastreamento de links","Filtros de medição de audiência","Lista de permissões de privacidade","Relatório de rastreadores","Regras de privacidade personalizadas"]},
+ {name:"Segurança",icon:"⬡",items:["Domínios de malware conhecidos","Domínios de comando e controle conhecidos","Proteção contra typosquatting conhecido","Domínios de fraude reportados","Certificados não são interceptados","Bloqueio de destinos de risco","Validação de listas assinadas","Integridade das regras","Proteção contra listas corrompidas","Modo de segurança"]},
+ {name:"Desempenho",icon:"ϟ",items:["Cache de decisões DNS","Regras indexadas","Atualização incremental","Deduplicação de listas","Limite de memória configurável","Processamento assíncrono","Métricas de latência","Economia de bateria","Controle de uso de dados","Rotina de limpeza segura"]},
+ {name:"Compatibilidade",icon:"◈",items:["Detecção de rede Wi-Fi","Detecção de rede móvel","Tratamento de troca de rede","Compatibilidade com IPv4","Compatibilidade com IPv6","Tratamento de DNS privado","Exceções para rede local","Compatibilidade com chamadas VoIP","Diagnóstico de VPN conflitante","Modo de pausa por rede"]},
+ {name:"Controle",icon:"☷",items:["Ativar e pausar proteção","Agendamento local","Lista de permissões","Lista de bloqueios personalizada","Importar listas confiáveis","Exportar configuração","Restaurar configuração","Perfis de uso","Bloqueio por categoria","Controle de notificações"]},
+ {name:"Auditoria",icon:"▤",items:["Contagem real de bloqueios","Registro de decisões DNS","Relatório de falsos positivos","Histórico local de eventos","Exportação de diagnóstico","Indicador de saúde","Teste de conectividade","Teste de resolução DNS","Registro de erros","Modo de depuração"]},
+ {name:"Atualizações",icon:"⟳",items:["Atualização segura de regras","Verificação de assinatura","Rollback de listas","Canal estável de regras","Canal de testes","Aviso de lista desatualizada","Controle de versão","Atualização incremental de filtros","Validação antes de aplicar","Recuperação após falha"]},
+ {name:"Proteção adaptativa",icon:"✧",items:["Detecção de bloqueio excessivo","Sugestão de exceções","Aprendizado local de preferências","Ajuste de regras por compatibilidade","Detecção de serviço indisponível","Proteção contra falso positivo","Regras temporárias","Análise de falhas por app","Recomendação de perfil","Verificação final de integridade"]}
+];
+const state=new Map();
+const allItems=groups.flatMap((g,gi)=>g.items.map((name,ii)=>({id:gi+"-"+ii,name,group:g.name,icon:g.icon})));
+allItems.forEach(x=>state.set(x.id,false));
+const root=document.getElementById("modules");
+const toastEl=document.getElementById("toast");
+let toastTimer;
+function toast(message){toastEl.textContent=message;toastEl.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove("show"),2200)}
+function render(){
+ const query=document.getElementById("moduleSearch").value.trim().toLocaleLowerCase("pt-BR");
+ root.innerHTML="";
+ groups.forEach((group,gi)=>{
+  const filtered=group.items.map((name,ii)=>({name,id:gi+"-"+ii})).filter(x=>x.name.toLocaleLowerCase("pt-BR").includes(query)||group.name.toLocaleLowerCase("pt-BR").includes(query));
+  if(!filtered.length)return;
+  const heading=document.createElement("h3");heading.textContent=group.icon+" "+group.name;heading.style.cssText="grid-column:1/-1;margin:12px 2px 0;font-size:14px;color:#c7d6ec";
+  root.appendChild(heading);
+  filtered.forEach(item=>{
+   const label=document.createElement("label");label.className="module"+(state.get(item.id)?"":" off");
+   const icon=document.createElement("span");icon.className="ico";icon.textContent=group.icon;
+   const copy=document.createElement("span");copy.style.flex="1";
+   const title=document.createElement("h3");title.textContent=item.name;
+   const desc=document.createElement("p");desc.textContent="Regra configurável • "+group.name;
+   copy.append(title,desc);
+   const input=document.createElement("input");input.type="checkbox";input.checked=state.get(item.id);input.setAttribute("aria-label","Ativar "+item.name);
+   input.addEventListener("change",()=>{state.set(item.id,input.checked);update();label.classList.toggle("off",!input.checked)});
+   label.append(icon,copy,input);root.appendChild(label);
+  });
+ });
+ update();
+}
+function update(){
+ const enabled=[...state.values()].filter(Boolean).length;
+ const total=state.size;
+ document.getElementById("enabledMetric").innerHTML=enabled+' <small>/ '+total+'</small>';
+ document.getElementById("moduleCount").textContent=enabled+" de "+total+" regras demonstrativas selecionadas";
+ document.getElementById("meterFill").style.width=(enabled/total*100)+"%";
+ const on=enabled===total;
+ const sw=document.getElementById("masterSwitch");
+ sw.setAttribute("aria-checked",String(on));
+ document.getElementById("masterState").textContent=enabled===0?"MODO DE DEMONSTRAÇÃO":on?"CONFIGURAÇÃO COMPLETA":"CONFIGURAÇÃO PERSONALIZADA";
+ document.getElementById("masterDescription").textContent=enabled===0?"Ative os módulos para simular sua configuração.":enabled+" módulos selecionados nesta prévia.";
+ document.getElementById("masterDot").style.background=enabled?"var(--mint)":"var(--gold)";
+}
+function setAll(value){allItems.forEach(x=>state.set(x.id,value));render();toast(value?"Todos os módulos selecionados na demonstração.":"Todos os módulos desativados na demonstração.")}
+document.getElementById("masterSwitch").addEventListener("click",()=>setAll(![...state.values()].every(Boolean)));
+document.getElementById("allOn").addEventListener("click",()=>setAll(true));
+document.getElementById("allOff").addEventListener("click",()=>setAll(false));
+document.getElementById("moduleSearch").addEventListener("input",render);
+document.getElementById("goModules").addEventListener("click",()=>document.getElementById("moduleSection").scrollIntoView({behavior:"smooth"}));
+render();
+</script>
+</body>
+</html>
