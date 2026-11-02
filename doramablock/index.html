@@ -93,7 +93,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--green);outline-offs
   const $=id=>document.getElementById(id);
   const tests=[
     {name:"Estrutura principal da página",detail:"Confere se os elementos essenciais do painel foram carregados.",run:()=>!!$("runChecks")&&!!$("checks")&&!!$("passed")&&!!$("health")},
-    {name:"Pesquisa e filtragem do catálogo",detail:"Executa a função de pesquisa sobre uma lista de funcionalidades e valida o resultado.",run:()=>{const items=["Filtro DNS IPv4","Contadores locais","Suporte IPv6"];const out=items.filter(x=>x.toLocaleLowerCase("pt-BR").includes("dns"));return out.length===1&&out[0]==="Filtro DNS IPv4";}},
+    {name:"Contagem e classificação dos testes",detail:"Valida a lógica que calcula quantos testes passaram e quantos falharam.",run:()=>{const sample=[{status:"pass"},{status:"fail"},{status:"pass"}];const result=summarize(sample);return result.passed===2&&result.failed===1&&result.total===3;}},
     {name:"Armazenamento local",detail:"Grava, lê e remove um valor temporário no armazenamento deste navegador.",run:()=>{const key="doramablock-health-check";try{localStorage.setItem(key,"ok");const ok=localStorage.getItem(key)==="ok";localStorage.removeItem(key);return ok&&localStorage.getItem(key)===null;}catch(e){return false;}}},
     {name:"Layout adaptável",detail:"Confere se o navegador informa uma viewport válida e se o painel usa layout em grade.",run:()=>window.innerWidth>0&&getComputedStyle(document.querySelector(".kpis")).display==="grid"},
     {name:"JavaScript e eventos",detail:"Confere se o botão de diagnóstico e os dados dos testes estão ativos.",run:()=>typeof runDiagnostics==="function"&&tests.length===4}
@@ -116,10 +116,12 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--green);outline-offs
       copy.append(title,desc,state);el.append(icon,copy);$("checks").appendChild(el);
     });
   }
+  function summarize(results){return {passed:results.filter(x=>x.status==="pass").length,failed:results.filter(x=>x.status==="fail").length,total:results.length};}
   function runDiagnostics(){
     const results=tests.map(test=>{let ok=false;try{ok=!!test.run();}catch(e){ok=false;}return {...test,status:ok?"pass":"fail"};});
-    const passed=results.filter(x=>x.status==="pass").length;
-    const failed=results.filter(x=>x.status==="fail").length;
+    const summary=summarize(results);
+    const passed=summary.passed;
+    const failed=summary.failed;
     const all=[...results,...deviceChecks.map(x=>({...x,status:"pending"}))];
     render(all);
     $("passed").textContent=String(passed);
