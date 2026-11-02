@@ -96,7 +96,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--green);outline-offs
     {name:"Contagem e classificação dos testes",detail:"Valida a lógica que calcula quantos testes passaram e quantos falharam.",run:()=>{const sample=[{status:"pass"},{status:"fail"},{status:"pass"}];const result=summarize(sample);return result.passed===2&&result.failed===1&&result.total===3;}},
     {name:"Armazenamento local",detail:"Grava, lê e remove um valor temporário no armazenamento deste navegador.",run:()=>{const key="doramablock-health-check";try{localStorage.setItem(key,"ok");const ok=localStorage.getItem(key)==="ok";localStorage.removeItem(key);return ok&&localStorage.getItem(key)===null;}catch(e){return false;}}},
     {name:"Layout adaptável",detail:"Confere se o navegador informa uma viewport válida e se o painel usa layout em grade.",run:()=>window.innerWidth>0&&getComputedStyle(document.querySelector(".kpis")).display==="grid"},
-    {name:"JavaScript e eventos",detail:"Confere se o botão de diagnóstico e os dados dos testes estão ativos.",run:()=>typeof runDiagnostics==="function"&&tests.length===4}
+    {name:"JavaScript e eventos",detail:"Confere se o botão de diagnóstico e os dados dos testes estão ativos.",run:()=>typeof runDiagnostics==="function"&&tests.length===5}
   ];
   const deviceChecks=[
     {name:"Permissão VPN Android",detail:"Só o aplicativo instalado pode solicitar e verificar essa permissão."},
