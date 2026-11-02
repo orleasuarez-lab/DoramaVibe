@@ -312,13 +312,27 @@ async function importData(file){
  $("importFile").value="";
 }
 function runSelfTest(){
- const cases=[
-  classify("pagead.doubleclick.net").kind==="blocked",
-  classify("notdoubleclick.net").kind==="unknown"||classify("notdoubleclick.net").kind==="blocked"===false,
-  normalizeDomain("https://example.com/path") === "example.com",
-  classify("dominio-invalido").kind==="invalid",
-  state.allows.every(x=>typeof x==="string")
- ];
+ const savedEnabled=state.enabled,savedAds=state.categories.ads;
+ const temporaryAllow=state.allows.includes("doubleclick.net");
+ const cases=[];
+ try{
+  cases.push(classify("pagead.doubleclick.net").kind==="blocked");
+  cases.push(classify("notdoubleclick.net").kind==="unknown");
+  cases.push(normalizeDomain("https://example.com/path")==="example.com");
+  cases.push(classify("dominio-invalido").kind==="invalid");
+  state.allows.push("doubleclick.net");
+  cases.push(classify("pagead.doubleclick.net").kind==="allowed");
+  state.allows=state.allows.filter(x=>x!=="doubleclick.net");
+  state.categories.ads=false;
+  cases.push(classify("pagead.doubleclick.net").kind==="unknown");
+  state.enabled=false;
+  cases.push(classify("pagead.doubleclick.net").kind==="paused");
+ }catch(e){cases.push(false);}
+ finally{
+  state.enabled=savedEnabled;state.categories.ads=savedAds;
+  if(temporaryAllow&&!state.allows.includes("doubleclick.net"))state.allows.push("doubleclick.net");
+  else if(!temporaryAllow)state.allows=state.allows.filter(x=>x!=="doubleclick.net");
+ }
  const passed=cases.filter(Boolean).length;
  notify("Autoteste local: "+passed+"/"+cases.length+" verificações passaram.");
 }
@@ -326,6 +340,7 @@ $("enabled").addEventListener("change",e=>{state.enabled=e.target.checked;saveSt
 $("catAds").addEventListener("change",e=>{state.categories.ads=e.target.checked;saveState();render();notify("Categoria de publicidade atualizada.");});
 $("catTrackers").addEventListener("change",e=>{state.categories.trackers=e.target.checked;saveState();render();notify("Categoria de rastreamento atualizada.");});
 $("toggleMaster").addEventListener("click",()=>{state.enabled=!state.enabled;saveState();render();notify(state.enabled?"Regras ativadas.":"Regras pausadas.");});
+$("runSelfTest").addEventListener("click",runSelfTest);
 $("addBlock").addEventListener("click",()=>addRule("block",$("newBlockDomain").value));
 $("addAllow").addEventListener("click",()=>addRule("allow",$("newAllowDomain").value));
 $("newBlockDomain").addEventListener("keydown",e=>{if(e.key==="Enter")addRule("block",e.target.value);});
