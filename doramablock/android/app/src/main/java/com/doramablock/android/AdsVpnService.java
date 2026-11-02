@@ -87,7 +87,7 @@ public final class AdsVpnService extends VpnService {
             worker = new Thread(this::runPacketLoop, "DoramaBlock-DNS");
             worker.start();
             updateNotification("Filtro DNS ativo; internet normal fora do DNS");
-        } catch (RuntimeException | IOException error) {
+        } catch (RuntimeException error) {
             setState(false);
             stopForeground(STOP_FOREGROUND_REMOVE);
             stopSelf();
