@@ -3,139 +3,344 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1220">
-<meta name="description" content="DoramaBlock — painel de saúde e diagnóstico do bloqueador DNS para Android.">
-<title>DoramaBlock | Diagnóstico real</title>
+<meta name="theme-color" content="#08111d">
+<meta name="description" content="DoramaBlock — painel de gerenciamento e teste local de regras de domínios.">
+<title>DoramaBlock | Painel de regras</title>
 <style>
-:root{color-scheme:dark;--bg:#09111e;--panel:#111e30;--panel2:#172840;--line:#29405d;--text:#f2f7ff;--muted:#9eb0c8;--green:#55ddb0;--red:#ff7888;--amber:#f2c66d;--blue:#82b4ff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#183958 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
-header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px clamp(16px,4vw,44px);background:#09111eeF;border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
-.brand{font-weight:900;font-size:22px;letter-spacing:-.7px}.brand span{color:var(--green)}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px}
-.wrap{max-width:1100px;margin:auto;padding:24px 16px 60px}.hero{padding:clamp(22px,5vw,40px);border:1px solid #315578;border-radius:24px;background:linear-gradient(115deg,#12314a,#14243c 65%,#1a2940)}
-.eyebrow{font-size:11px;font-weight:850;letter-spacing:2px;color:var(--green)}h1{font-size:clamp(34px,7vw,56px);line-height:1.03;letter-spacing:-1.8px;margin:10px 0 12px}.hero p{max-width:720px;color:#c3d2e5;margin:0 0 18px}
-button,a.button{font:inherit;text-decoration:none;cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--panel2);color:var(--text);font-weight:750;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-button.primary,a.primary{background:var(--green);border-color:var(--green);color:#06251c}
-button:focus-visible,a:focus-visible{outline:2px solid var(--green);outline-offset:3px}
-.topline{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px}.chip{border:1px solid var(--line);background:#0e1b2d;border-radius:99px;padding:5px 10px;color:var(--muted);font-size:12px}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.card{background:linear-gradient(160deg,var(--panel),#0e1929);border:1px solid var(--line);border-radius:18px;padding:18px;min-width:0}
-.kpi-label{font-size:12px;color:var(--muted)}.kpi{font-size:32px;font-weight:900;letter-spacing:-1px}.kpi-sub{font-size:11px;color:var(--muted)}
-.section{margin-top:28px}.sectionhead{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:12px}.sectionhead h2{margin:0;font-size:21px}.sectionhead p{color:var(--muted);font-size:13px;margin:4px 0 0}
-.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.check{display:flex;align-items:flex-start;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}.check .symbol{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:10px;background:#203047;font-weight:900}.check.pass .symbol{color:var(--green);background:#12382f}.check.fail .symbol{color:var(--red);background:#3a2029}.check.pending .symbol{color:var(--amber);background:#3a321c}.check h3{font-size:14px;margin:0 0 3px}.check p{font-size:12px;line-height:1.4;color:var(--muted);margin:0}.state{font-size:10px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;margin-top:7px;display:inline-block;color:var(--muted)}.pass .state{color:var(--green)}.fail .state{color:var(--red)}.pending .state{color:var(--amber)}
-.features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.feature{padding:15px;background:var(--panel);border:1px solid var(--line);border-radius:14px}.feature h3{font-size:14px;margin:0 0 4px}.feature p{font-size:12px;color:var(--muted);margin:0 0 9px}.tag{font-size:10px;letter-spacing:.5px;text-transform:uppercase;font-weight:850;padding:4px 8px;border-radius:99px;background:#3a321c;color:var(--amber);display:inline-block}.tag.ok{background:#12382f;color:var(--green)}.tag.no{background:#3a2029;color:var(--red)}
-.notice{border-left:3px solid var(--amber);background:#292515;border-radius:8px;padding:14px 16px;color:#e9ddb9;font-size:13px;margin-top:16px}
-.tools{display:flex;gap:9px;flex-wrap:wrap}.muted{color:var(--muted)}footer{border-top:1px solid var(--line);margin-top:28px;padding-top:16px;color:var(--muted);font-size:12px}
-@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.checks,.features{grid-template-columns:1fr}.hero{border-radius:19px}.kpi{font-size:28px}}
-@media(max-width:380px){.kpis{gap:8px}.card{padding:14px}.kpi{font-size:25px}}
+:root{color-scheme:dark;--bg:#08111d;--surface:#101d2e;--surface2:#15263b;--line:#263d57;--text:#eff6ff;--muted:#9badc4;--green:#56e0b4;--red:#ff7d91;--amber:#f5ca73;--blue:#8ab8ff;--shadow:0 16px 45px #0003}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 78% -10%,#153c56 0,transparent 40%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+header{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px clamp(14px,4vw,42px);background:#08111df2;border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
+.brand{font-size:22px;font-weight:950;letter-spacing:-.8px}.brand span{color:var(--green)}.brand small{display:block;font-size:9px;letter-spacing:2px;color:var(--muted);font-weight:800}
+.header-right{display:flex;gap:9px;align-items:center}.status-pill,.pill{border:1px solid var(--line);background:#102036;border-radius:99px;padding:6px 10px;font-size:11px;color:var(--muted);font-weight:800}.status-pill.on{color:var(--green);border-color:#28634f}.status-pill.off{color:var(--amber)}
+.layout{max-width:1180px;margin:auto;padding:24px 16px 60px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px}
+aside{position:sticky;top:82px;align-self:start;background:#0d1929;border:1px solid var(--line);border-radius:18px;padding:12px}
+.nav-title{font-size:10px;color:var(--muted);font-weight:900;letter-spacing:1.5px;padding:8px 10px}.nav a{display:flex;align-items:center;gap:10px;text-decoration:none;color:#c8d7e9;padding:10px;border-radius:10px;font-size:13px;font-weight:750}.nav a:hover,.nav a.active{background:#1a3048;color:var(--green)}
+aside .scope{margin:12px 4px 3px;padding:12px;border:1px solid #5a4b27;border-radius:12px;background:#282315;color:#e8d9aa;font-size:11px}
+main{min-width:0}.hero{padding:clamp(22px,4vw,36px);border:1px solid #315779;border-radius:22px;background:linear-gradient(120deg,#12344b,#152940 65%,#1d2b43);box-shadow:var(--shadow)}
+.eyebrow{font-size:10px;font-weight:900;letter-spacing:2px;color:var(--green)}h1{font-size:clamp(32px,6vw,48px);line-height:1.04;letter-spacing:-1.6px;margin:10px 0 12px}.hero p{max-width:760px;color:#c4d4e6;margin:0 0 18px}
+button,a.btn{font:inherit;text-decoration:none;cursor:pointer;border:1px solid var(--line);border-radius:11px;padding:10px 13px;background:var(--surface2);color:var(--text);font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.15s ease}
+button:hover,a.btn:hover{filter:brightness(1.14);transform:translateY(-1px)}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+button.primary,a.primary{background:var(--green);border-color:var(--green);color:#05251b}button.danger{border-color:#714050;color:#ffb2bd;background:#351e2a}button.small{padding:7px 10px;font-size:12px}
+.actions{display:flex;flex-wrap:wrap;gap:9px}.hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.section{margin-top:24px;scroll-margin-top:90px}.section-head{display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:12px;margin-bottom:11px}.section-head h2{font-size:20px;margin:0;letter-spacing:-.4px}.section-head p{font-size:12px;color:var(--muted);margin:4px 0 0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}.card{border:1px solid var(--line);border-radius:15px;background:linear-gradient(155deg,var(--surface),#0d1929);padding:15px;min-width:0}.stat-label{font-size:11px;color:var(--muted)}.stat-value{font-size:29px;font-weight:950;letter-spacing:-1px}.stat-hint{font-size:10px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.panel{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:17px;min-width:0}.panel h3{font-size:15px;margin:0 0 4px}.panel .sub{font-size:11px;color:var(--muted);margin:0 0 12px}
+.switch-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 0;border-top:1px solid #20344b}.switch-row:first-of-type{border-top:0}.switch-copy strong{display:block;font-size:13px}.switch-copy small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.switch{position:relative;width:48px;height:28px;flex:none}.switch input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}.track{position:absolute;inset:0;border-radius:99px;background:#45536a;border:1px solid #65748a;pointer-events:none;transition:.2s}.track:after{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s}.switch input:checked+.track{background:#147b60;border-color:#32c99c}.switch input:checked+.track:after{transform:translateX(20px)}.switch input:focus-visible+.track{outline:2px solid var(--green);outline-offset:3px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-size:12px;font-weight:800;color:#cfdeef}.field input,.field select{min-width:0;width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:#091626;color:var(--text);font:inherit;font-size:13px}.field-row{display:flex;gap:9px;align-items:end}.field-row .field{flex:1}.field-help{font-size:11px;color:var(--muted)}
+.result{margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0b1828;display:none}.result.show{display:block}.result.good{border-color:#28634f}.result.bad{border-color:#714050}.result.neutral{border-color:#65552a}.result strong{display:block;font-size:13px}.result span{font-size:11px;color:var(--muted)}
+.list{display:flex;flex-direction:column;gap:7px;margin-top:13px}.rule{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid #273d55;background:#0c1929;border-radius:11px;padding:9px 10px;min-width:0}.rule-name{font-size:12px;font-weight:750;overflow-wrap:anywhere}.rule-meta{font-size:10px;color:var(--muted)}.rule-actions{display:flex;gap:6px;flex:none}
+.empty{padding:17px;border:1px dashed #38516d;border-radius:12px;color:var(--muted);font-size:12px;text-align:center}
+.inline-tools{display:flex;gap:8px;flex-wrap:wrap}.search{max-width:240px}
+.notice{border:1px solid #685629;background:#292416;border-radius:13px;padding:14px 16px;color:#eadcad;font-size:12px;margin-top:20px}.notice strong{color:#ffe8a3}
+.toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:40;padding:11px 15px;border-radius:11px;background:#d5ffef;color:#06251b;font-weight:850;font-size:12px;box-shadow:var(--shadow);transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{border-top:1px solid var(--line);margin-top:25px;padding-top:16px;color:var(--muted);font-size:11px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.layout>aside{position:static}.nav{display:flex;overflow:auto;gap:4px}.nav-title,.scope{display:none}.nav a{white-space:nowrap;padding:8px 10px}.grid2{grid-template-columns:1fr}}
+@media(max-width:560px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.field-row{align-items:stretch;flex-direction:column}.field-row button{width:100%}.header-right .pill{display:none}.hero{border-radius:17px}.stat-value{font-size:26px}}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand">Dorama<span>Block</span><small>DIAGNÓSTICO DO PROJETO</small></div>
-  <span class="chip" id="webState">INICIANDO TESTES…</span>
+  <div class="brand">Dorama<span>Block</span><small>PAINEL DE REGRAS</small></div>
+  <div class="header-right"><span class="pill">Configurações salvas neste navegador</span><span class="status-pill on" id="globalStatus">REGRAS ATIVAS</span></div>
 </header>
-<main class="wrap">
-<section class="hero">
-  <div class="eyebrow">PAINEL DE SAÚDE • TESTES VERIFICÁVEIS</div>
-  <h1>Veja o que está<br>funcionando de verdade.</h1>
-  <p>Este painel testa as funções do próprio site neste navegador e separa isso do que só pode ser verificado dentro do aplicativo Android. Ele não inventa um status de VPN nem conta anúncios que não consegue observar.</p>
-  <div class="tools">
-    <button class="primary" id="runChecks">↻ Executar diagnóstico</button>
-    <a class="button" href="https://github.com/orleasuarez-lab/DoramaVibe/tree/main/doramablock/android" target="_blank" rel="noopener">Código Android ↗</a>
-  </div>
-  <div class="topline">
-    <span class="chip" id="lastRun">Nenhum teste executado</span>
-    <span class="chip">Escopo: este navegador</span>
-    <span class="chip">Sem telemetria externa</span>
-  </div>
+<div class="layout">
+<aside>
+  <div class="nav-title">MENU PRINCIPAL</div>
+  <nav class="nav">
+    <a class="active" href="#inicio">⌂ Visão geral</a>
+    <a href="#protecao">◉ Preferências</a>
+    <a href="#regras">▤ Regras de bloqueio</a>
+    <a href="#excecoes">✓ Exceções</a>
+    <a href="#teste">⌕ Testar domínio</a>
+    <a href="#dados">⚙ Dados e backup</a>
+  </nav>
+  <div class="scope"><strong>Escopo real</strong><br>Este painel gerencia e testa regras locais. Um site comum não consegue bloquear requisições de outras abas ou aplicativos.</div>
+</aside>
+<main>
+<section class="hero" id="inicio">
+  <div class="eyebrow">CENTRAL DE CONTROLE • DADOS LOCAIS</div>
+  <h1>Suas regras.<br>Seu controle.</h1>
+  <p>Gerencie domínios bloqueados e exceções, escolha categorias, teste endereços e mantenha um backup das configurações. Tudo é salvo neste navegador.</p>
+  <div class="actions"><button class="primary" id="toggleMaster">Pausar regras</button><button id="runSelfTest">Executar autoteste</button></div>
+  <div class="hero-meta"><span class="pill" id="saveStatus">Configuração carregada</span><span class="pill">Armazenamento local</span><span class="pill">Sem conta necessária</span></div>
 </section>
 
-<section class="kpis" aria-label="Resumo do diagnóstico">
-  <article class="card"><div class="kpi-label">Testes aprovados</div><div class="kpi" id="passed">—</div><div class="kpi-sub">Verificados nesta página</div></article>
-  <article class="card"><div class="kpi-label">Falhas encontradas</div><div class="kpi" id="failed">—</div><div class="kpi-sub">Precisam de correção</div></article>
-  <article class="card"><div class="kpi-label">Testes Android pendentes</div><div class="kpi" id="pending">4</div><div class="kpi-sub">Exigem o app no celular</div></article>
-  <article class="card"><div class="kpi-label">Saúde do painel web</div><div class="kpi" id="health">Verificando</div><div class="kpi-sub">Não representa proteção de anúncios</div></article>
+<section class="stats" aria-label="Estatísticas do verificador">
+  <article class="card"><div class="stat-label">Domínios na lista</div><div class="stat-value" id="blockedTotal">0</div><div class="stat-hint">Regras de bloqueio cadastradas</div></article>
+  <article class="card"><div class="stat-label">Exceções</div><div class="stat-value" id="allowedTotal">0</div><div class="stat-hint">Domínios liberados manualmente</div></article>
+  <article class="card"><div class="stat-label">Testes realizados</div><div class="stat-value" id="testTotal">0</div><div class="stat-hint">Consultas feitas neste painel</div></article>
+  <article class="card"><div class="stat-label">Correspondências</div><div class="stat-value" id="matchTotal">0</div><div class="stat-hint">Domínios que bateram nas regras</div></article>
 </section>
 
-<section class="section">
-  <div class="sectionhead"><div><h2>Diagnóstico automático</h2><p>Os resultados abaixo vêm de verificações executadas, não de opções marcadas manualmente.</p></div></div>
-  <div class="checks" id="checks" aria-live="polite"></div>
-</section>
-
-<section class="section">
-  <div class="sectionhead"><div><h2>O que o aplicativo realmente contém</h2><p>Conferência baseada no código Android atual; execução no aparelho ainda precisa ser validada.</p></div></div>
-  <div class="features">
-    <article class="feature"><h3>Filtro DNS IPv4 por UDP</h3><p>O serviço VPN recebe consultas DNS IPv4/UDP direcionadas ao resolvedor local.</p><span class="tag ok">Implementado no código</span></article>
-    <article class="feature"><h3>Lista inicial de domínios</h3><p>Há uma lista local pequena com 16 domínios de publicidade/rastreamento conhecidos.</p><span class="tag ok">Implementado no código</span></article>
-    <article class="feature"><h3>Contadores DNS</h3><p>O app grava decisões bloqueadas e respostas DNS permitidas no armazenamento local.</p><span class="tag ok">Implementado no código</span></article>
-    <article class="feature"><h3>IPv6, DNS TCP, DoH e DoT</h3><p>Esses caminhos não são tratados pelo mecanismo atual e podem contornar o filtro.</p><span class="tag no">Não implementado</span></article>
-    <article class="feature"><h3>Estado real da VPN no celular</h3><p>O site não consegue ler com segurança o estado privado do serviço VPN Android.</p><span class="tag">Ver no aplicativo</span></article>
-    <article class="feature"><h3>Anúncios removidos de cada app</h3><p>O contador DNS não equivale a anúncios removidos. Anúncios servidos pelo mesmo domínio do conteúdo podem continuar aparecendo.</p><span class="tag">Não mensurável aqui</span></article>
-  </div>
-</section>
-
-<section class="notice">
-  <b>Importante:</b> o site não controla o Android e não pode provar que a VPN está ativa. O filtro atual é um MVP DNS limitado, não um bloqueador universal. Para testar a proteção real, instale o APK, conceda a permissão VPN do Android e confira os contadores e o estado dentro do aplicativo. Não há garantia de bloquear 100% dos anúncios.
-</section>
-
-<section class="section">
-  <div class="sectionhead"><div><h2>Projeto e testes</h2><p>Acompanhe as fontes e o resultado da compilação Android.</p></div></div>
-  <div class="tools">
-    <a class="button" href="https://github.com/orleasuarez-lab/DoramaVibe/actions" target="_blank" rel="noopener">Compilação e testes ↗</a>
-    <a class="button" href="https://github.com/orleasuarez-lab/DoramaVibe/tree/main/doramablock" target="_blank" rel="noopener">Arquivos do projeto ↗</a>
+<section class="section" id="protecao">
+  <div class="section-head"><div><h2>Preferências de regras</h2><p>As opções abaixo mudam o resultado do teste de domínio e ficam salvas no navegador.</p></div></div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Estado geral</h3><p class="sub">Liga ou pausa a avaliação de regras dentro deste painel.</p>
+      <div class="switch-row"><div class="switch-copy"><strong>Motor de regras</strong><small>Quando desligado, o verificador não marca domínios como bloqueados.</small></div><label class="switch"><input id="enabled" type="checkbox" checked aria-label="Ativar motor de regras"><span class="track"></span></label></div>
+    </div>
+    <div class="panel">
+      <h3>Categorias</h3><p class="sub">Ative ou desative grupos da lista inicial.</p>
+      <div class="switch-row"><div class="switch-copy"><strong>Publicidade</strong><small>Redes de anúncios e afiliados.</small></div><label class="switch"><input id="catAds" type="checkbox" checked aria-label="Ativar categoria publicidade"><span class="track"></span></label></div>
+      <div class="switch-row"><div class="switch-copy"><strong>Rastreamento</strong><small>Domínios de métricas e medição.</small></div><label class="switch"><input id="catTrackers" type="checkbox" checked aria-label="Ativar categoria rastreamento"><span class="track"></span></label></div>
+    </div>
   </div>
 </section>
 
-<footer>DoramaBlock • Painel de diagnóstico local. Os testes são executados no navegador atual; nenhum dado de uso é enviado a um servidor por esta página.</footer>
+<section class="section" id="teste">
+  <div class="section-head"><div><h2>Testar um domínio</h2><p>Confira como suas regras classificariam um endereço.</p></div></div>
+  <div class="panel">
+    <div class="field-row">
+      <div class="field"><label for="domainInput">Endereço ou domínio</label><input id="domainInput" type="text" placeholder="Ex.: pagead.doubleclick.net" autocomplete="off" spellcheck="false"></div>
+      <button class="primary" id="testDomain">Verificar domínio</button>
+    </div>
+    <div class="field-help" style="margin-top:8px">Você pode colar um domínio ou uma URL completa. O teste é feito localmente, sem enviar o endereço a um servidor.</div>
+    <div class="result" id="testResult" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="section" id="regras">
+  <div class="section-head"><div><h2>Lista de bloqueio</h2><p>Adicione ou remova domínios que devem ser classificados como bloqueados pelo verificador.</p></div></div>
+  <div class="panel">
+    <div class="field-row">
+      <div class="field"><label for="newBlockDomain">Adicionar domínio</label><input id="newBlockDomain" type="text" placeholder="Ex.: ads.exemplo.com" autocomplete="off" spellcheck="false"></div>
+      <button class="primary" id="addBlock">Adicionar regra</button>
+    </div>
+    <div class="inline-tools" style="margin-top:13px;align-items:center;justify-content:space-between">
+      <span class="pill" id="blockCountLabel">0 regras</span>
+      <input class="field search" id="blockSearch" type="search" placeholder="Buscar regra..." aria-label="Buscar regra de bloqueio" style="max-width:220px">
+    </div>
+    <div class="list" id="blockList"></div>
+  </div>
+</section>
+
+<section class="section" id="excecoes">
+  <div class="section-head"><div><h2>Lista de exceções</h2><p>Domínios nesta lista têm prioridade e são liberados no resultado do verificador.</p></div></div>
+  <div class="panel">
+    <div class="field-row">
+      <div class="field"><label for="newAllowDomain">Liberar domínio</label><input id="newAllowDomain" type="text" placeholder="Ex.: conteudo.exemplo.com" autocomplete="off" spellcheck="false"></div>
+      <button class="primary" id="addAllow">Adicionar exceção</button>
+    </div>
+    <div class="inline-tools" style="margin-top:13px;align-items:center;justify-content:space-between">
+      <span class="pill" id="allowCountLabel">0 exceções</span>
+      <input class="field search" id="allowSearch" type="search" placeholder="Buscar exceção..." aria-label="Buscar exceção" style="max-width:220px">
+    </div>
+    <div class="list" id="allowList"></div>
+  </div>
+</section>
+
+<section class="section" id="dados">
+  <div class="section-head"><div><h2>Dados e backup</h2><p>Exporte suas listas e preferências ou restaure uma cópia anterior.</p></div></div>
+  <div class="panel">
+    <div class="actions">
+      <button class="primary" id="exportData">⇩ Exportar configurações</button>
+      <button id="importButton">⇧ Importar configurações</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+      <button id="resetStats">Zerar estatísticas</button>
+      <button class="danger" id="resetAll">Restaurar padrão</button>
+    </div>
+    <p class="field-help" style="margin-top:12px">A cópia inclui listas, categorias, estado do motor e estatísticas. Os dados não são sincronizados entre dispositivos.</p>
+  </div>
+</section>
+
+<section class="notice"><strong>Transparência:</strong> este site é um gerenciador e verificador de regras local. Ele não consegue interceptar anúncios carregados por outros sites, outras abas ou aplicativos do celular. Os números mostram testes feitos no próprio painel, não anúncios removidos. Para bloqueio de tráfego em todo o aparelho seria necessário um serviço DNS/VPN ou uma extensão de navegador compatível.</section>
+
+<footer>DoramaBlock • As configurações ficam no armazenamento local do navegador. Nenhum domínio digitado é enviado a um servidor por esta página. Ao limpar os dados do navegador, suas regras locais também podem ser apagadas.</footer>
 </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 "use strict";
 (function(){
-  const $=id=>document.getElementById(id);
-  const tests=[
-    {name:"Estrutura principal da página",detail:"Confere se os elementos essenciais do painel foram carregados.",run:()=>!!$("runChecks")&&!!$("checks")&&!!$("passed")&&!!$("health")},
-    {name:"Contagem e classificação dos testes",detail:"Valida a lógica que calcula quantos testes passaram e quantos falharam.",run:()=>{const sample=[{status:"pass"},{status:"fail"},{status:"pass"}];const result=summarize(sample);return result.passed===2&&result.failed===1&&result.total===3;}},
-    {name:"Armazenamento local",detail:"Grava, lê e remove um valor temporário no armazenamento deste navegador.",run:()=>{const key="doramablock-health-check";try{localStorage.setItem(key,"ok");const ok=localStorage.getItem(key)==="ok";localStorage.removeItem(key);return ok&&localStorage.getItem(key)===null;}catch(e){return false;}}},
-    {name:"Layout adaptável",detail:"Confere se o navegador informa uma viewport válida e se o painel usa layout em grade.",run:()=>window.innerWidth>0&&getComputedStyle(document.querySelector(".kpis")).display==="grid"},
-    {name:"JavaScript e eventos",detail:"Confere se o botão de diagnóstico e os dados dos testes estão ativos.",run:()=>typeof runDiagnostics==="function"&&tests.length===5}
-  ];
-  const deviceChecks=[
-    {name:"Permissão VPN Android",detail:"Só o aplicativo instalado pode solicitar e verificar essa permissão."},
-    {name:"Serviço VPN ativo",detail:"O navegador não tem acesso ao estado privado do serviço Android."},
-    {name:"Consultas DNS bloqueadas",detail:"É necessário executar consultas reais pelo túnel VPN no aparelho."},
-    {name:"Anúncios efetivamente removidos",detail:"Exige testes controlados por aplicativo; o contador DNS não mede anúncios removidos."}
-  ];
-  function render(items){
-    $("checks").innerHTML="";
-    items.forEach(item=>{
-      const el=document.createElement("article");el.className="check "+item.status;
-      const icon=document.createElement("span");icon.className="symbol";icon.textContent=item.status==="pass"?"✓":item.status==="fail"?"!":"…";
-      const copy=document.createElement("div");copy.style.flex="1";
-      const title=document.createElement("h3");title.textContent=item.name;
-      const desc=document.createElement("p");desc.textContent=item.detail;
-      const state=document.createElement("span");state.className="state";state.textContent=item.status==="pass"?"Aprovado":item.status==="fail"?"Falhou":"Pendente no Android";
-      copy.append(title,desc,state);el.append(icon,copy);$("checks").appendChild(el);
-    });
-  }
-  function summarize(results){return {passed:results.filter(x=>x.status==="pass").length,failed:results.filter(x=>x.status==="fail").length,total:results.length};}
-  function runDiagnostics(){
-    const results=tests.map(test=>{let ok=false;try{ok=!!test.run();}catch(e){ok=false;}return {...test,status:ok?"pass":"fail"};});
-    const summary=summarize(results);
-    const passed=summary.passed;
-    const failed=summary.failed;
-    const all=[...results,...deviceChecks.map(x=>({...x,status:"pending"}))];
-    render(all);
-    $("passed").textContent=String(passed);
-    $("failed").textContent=String(failed);
-    $("pending").textContent=String(deviceChecks.length);
-    $("health").textContent=failed===0?"Estável":"Atenção";
-    $("health").style.color=failed===0?"var(--green)":"var(--red)";
-    $("webState").textContent=failed===0?"PAINEL WEB OPERACIONAL":"FALHA NO PAINEL";
-    $("webState").style.color=failed===0?"var(--green)":"var(--red)";
-    $("lastRun").textContent="Último teste: "+new Date().toLocaleString("pt-BR");
-  }
-  window.runDiagnostics=runDiagnostics;
-  $("runChecks").addEventListener("click",runDiagnostics);
-  runDiagnostics();
+const STORAGE_KEY="doramablock_web_settings_v2";
+const DEFAULT_BLOCKS=[
+{domain:"doubleclick.net",category:"ads",source:"Padrão"},
+{domain:"googlesyndication.com",category:"ads",source:"Padrão"},
+{domain:"googleadservices.com",category:"ads",source:"Padrão"},
+{domain:"adservice.google.com",category:"ads",source:"Padrão"},
+{domain:"adnxs.com",category:"ads",source:"Padrão"},
+{domain:"adform.net",category:"ads",source:"Padrão"},
+{domain:"taboola.com",category:"ads",source:"Padrão"},
+{domain:"outbrain.com",category:"ads",source:"Padrão"},
+{domain:"adsrvr.org",category:"ads",source:"Padrão"},
+{domain:"criteo.com",category:"ads",source:"Padrão"},
+{domain:"rubiconproject.com",category:"ads",source:"Padrão"},
+{domain:"pubmatic.com",category:"ads",source:"Padrão"},
+{domain:"openx.net",category:"ads",source:"Padrão"},
+{domain:"scorecardresearch.com",category:"trackers",source:"Padrão"},
+{domain:"moatads.com",category:"trackers",source:"Padrão"},
+{domain:"serving-sys.com",category:"trackers",source:"Padrão"}
+];
+const DEFAULT_STATE={enabled:true,categories:{ads:true,trackers:true},blocks:DEFAULT_BLOCKS,allows:[],stats:{tests:0,matches:0,allowed:0,unknown:0},lastResult:null};
+let state=loadState();
+const $=id=>document.getElementById(id);
+function clone(value){return JSON.parse(JSON.stringify(value));}
+function loadState(){
+ try{
+  const saved=localStorage.getItem(STORAGE_KEY);
+  if(!saved)return clone(DEFAULT_STATE);
+  const parsed=JSON.parse(saved);
+  if(!parsed||!Array.isArray(parsed.blocks)||!Array.isArray(parsed.allows))return clone(DEFAULT_STATE);
+  return {
+   enabled:parsed.enabled!==false,
+   categories:{ads:parsed.categories?.ads!==false,trackers:parsed.categories?.trackers!==false},
+   blocks:parsed.blocks.filter(x=>x&&typeof x.domain==="string").map(x=>({domain:normalizeDomain(x.domain),category:x.category==="trackers"?"trackers":"custom",source:x.source==="Padrão"?"Padrão":"Personalizado"})).filter(x=>x.domain),
+   allows:parsed.allows.map(normalizeDomain).filter(Boolean),
+   stats:{tests:Number(parsed.stats?.tests)||0,matches:Number(parsed.stats?.matches)||0,allowed:Number(parsed.stats?.allowed)||0,unknown:Number(parsed.stats?.unknown)||0},
+   lastResult:null
+  };
+ }catch(e){return clone(DEFAULT_STATE);}
+}
+function saveState(){
+ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));$("saveStatus").textContent="Salvo agora neste navegador";}
+ catch(e){$("saveStatus").textContent="Não foi possível salvar neste navegador";notify("O navegador bloqueou o armazenamento local.");}
+}
+function normalizeDomain(raw){
+ if(typeof raw!=="string")return "";
+ let value=raw.trim().toLowerCase();
+ if(!value)return "";
+ try{
+  if(!/^[a-z][a-z0-9+.-]*:\/\//i.test(value)&&value.includes("/"))value="https://"+value;
+  if(/^[a-z][a-z0-9+.-]*:\/\//i.test(value))value=new URL(value).hostname.toLowerCase();
+ }catch(e){return "";}
+ value=value.replace(/^\.+|\.+$/g,"");
+ if(value.startsWith("*."))value=value.slice(2);
+ if(value.length>253||value.includes("..")||value.includes("/")||value.includes(":"))return "";
+ const labels=value.split(".");
+ if(labels.length<2)return "";
+ for(const label of labels){if(!/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label))return "";}
+ return value;
+}
+function matches(host,rule){return host===rule||host.endsWith("."+rule);}
+function enabledRule(rule){
+ if(rule.category==="ads")return state.categories.ads;
+ if(rule.category==="trackers")return state.categories.trackers;
+ return true;
+}
+function classify(raw){
+ const host=normalizeDomain(raw);
+ if(!host)return {kind:"invalid",host:"",message:"Digite um domínio válido, como exemplo.com."};
+ if(state.allows.some(rule=>matches(host,rule)))return {kind:"allowed",host,rule:state.allows.find(rule=>matches(host,rule)),message:"Este domínio está na sua lista de exceções."};
+ if(!state.enabled)return {kind:"paused",host,message:"O motor de regras está pausado. Nenhuma regra será aplicada."};
+ const hit=state.blocks.find(rule=>enabledRule(rule)&&matches(host,rule.domain));
+ if(hit)return {kind:"blocked",host,rule:hit.domain,category:hit.category,message:"O domínio corresponde a uma regra ativa de bloqueio."};
+ return {kind:"unknown",host,message:"Nenhuma regra ativa corresponde a este domínio."};
+}
+function notify(message){
+ const toast=$("toast");toast.textContent=message;toast.classList.add("show");
+ clearTimeout(notify.timer);notify.timer=setTimeout(()=>toast.classList.remove("show"),2400);
+}
+function make(tag,className,text){
+ const element=document.createElement(tag);if(className)element.className=className;if(text!==undefined)element.textContent=text;return element;
+}
+function renderList(type){
+ const isBlock=type==="block",list=isBlock?state.blocks:state.allows,container=$(isBlock?"blockList":"allowList"),search=$(isBlock?"blockSearch":"allowSearch").value.trim().toLowerCase();
+ container.replaceChildren();
+ const filtered=list.filter(item=>(isBlock?item.domain:item).includes(search));
+ if(!filtered.length){container.appendChild(make("div","empty",search?"Nenhuma correspondência encontrada.":"Nenhuma regra cadastrada ainda."));}
+ filtered.forEach(item=>{
+  const domain=isBlock?item.domain:item;
+  const row=make("div","rule");
+  const left=make("div","");
+  left.appendChild(make("div","rule-name",domain));
+  left.appendChild(make("div","rule-meta",isBlock?(item.source==="Padrão"?"Lista inicial • "+(item.category==="trackers"?"Rastreamento":"Publicidade"):"Regra personalizada"):"Exceção personalizada"));
+  const controls=make("div","rule-actions");
+  const remove=make("button","small danger","Remover");remove.type="button";
+  remove.addEventListener("click",()=>removeRule(type,domain));
+  controls.appendChild(remove);row.append(left,controls);container.appendChild(row);
+ });
+ $(isBlock?"blockCountLabel":"allowCountLabel").textContent=list.length+(isBlock?" regras":" exceções");
+}
+function render(){
+ $("enabled").checked=state.enabled;$("catAds").checked=state.categories.ads;$("catTrackers").checked=state.categories.trackers;
+ $("globalStatus").textContent=state.enabled?"REGRAS ATIVAS":"REGRAS PAUSADAS";$("globalStatus").className="status-pill "+(state.enabled?"on":"off");
+ $("toggleMaster").textContent=state.enabled?"Pausar regras":"Ativar regras";
+ $("blockedTotal").textContent=state.blocks.length;$("allowedTotal").textContent=state.allows.length;
+ $("testTotal").textContent=state.stats.tests;$("matchTotal").textContent=state.stats.matches;
+ renderList("block");renderList("allow");
+}
+function addRule(type,raw){
+ const domain=normalizeDomain(raw);
+ if(!domain){notify("Digite um domínio válido.");return;}
+ if(type==="block"){
+  if(state.blocks.some(x=>x.domain===domain)){notify("Esse domínio já está na lista de bloqueio.");return;}
+  state.blocks.push({domain,category:"custom",source:"Personalizado"});
+  $("newBlockDomain").value="";
+ }else{
+  if(state.allows.includes(domain)){notify("Esse domínio já está nas exceções.");return;}
+  state.allows.push(domain);$("newAllowDomain").value="";
+ }
+ saveState();render();notify("Regra salva: "+domain);
+}
+function removeRule(type,domain){
+ if(type==="block")state.blocks=state.blocks.filter(x=>x.domain!==domain);
+ else state.allows=state.allows.filter(x=>x!==domain);
+ saveState();render();notify("Regra removida.");
+}
+function runDomainTest(){
+ const raw=$("domainInput").value;const result=classify(raw);const box=$("testResult");
+ box.className="result show "+(result.kind==="blocked"?"bad":result.kind==="allowed"?"good":result.kind==="invalid"?"neutral":"");
+ box.replaceChildren();
+ const title=make("strong", "", result.kind==="blocked"?"BLOQUEIO PELA REGRA":result.kind==="allowed"?"LIBERADO PELA EXCEÇÃO":result.kind==="paused"?"MOTOR PAUSADO":result.kind==="unknown"?"SEM REGRA CORRESPONDENTE":"DOMÍNIO INVÁLIDO");
+ const detail=make("span","",result.message+(result.rule?" Regra: "+result.rule+".":"")+(result.host?" Domínio: "+result.host+".":""));
+ box.append(title,detail);
+ if(result.kind!=="invalid"){
+  state.stats.tests++;
+  if(result.kind==="blocked")state.stats.matches++;
+  else if(result.kind==="allowed")state.stats.allowed++;
+  else state.stats.unknown++;
+  state.lastResult={kind:result.kind,host:result.host,at:new Date().toISOString()};
+  saveState();render();
+ }
+}
+function exportData(){
+ const data={app:"DoramaBlock Web Rules",version:2,exportedAt:new Date().toISOString(),settings:state};
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob);const a=make("a");a.href=url;a.download="doramablock-config.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);notify("Backup exportado.");
+}
+async function importData(file){
+ try{
+  const data=JSON.parse(await file.text());const candidate=data.settings||data;
+  if(!candidate||!Array.isArray(candidate.blocks)||!Array.isArray(candidate.allows))throw new Error("Formato inválido");
+  const next={enabled:candidate.enabled!==false,categories:{ads:candidate.categories?.ads!==false,trackers:candidate.categories?.trackers!==false},blocks:[],allows:[],stats:{tests:0,matches:0,allowed:0,unknown:0},lastResult:null};
+  candidate.blocks.forEach(item=>{const domain=normalizeDomain(typeof item==="string"?item:item.domain);if(domain&&!next.blocks.some(x=>x.domain===domain))next.blocks.push({domain,category:item.category==="trackers"?"trackers":"custom",source:"Personalizado"});});
+  candidate.allows.forEach(item=>{const domain=normalizeDomain(item);if(domain&&!next.allows.includes(domain))next.allows.push(domain);});
+  ["tests","matches","allowed","unknown"].forEach(key=>next.stats[key]=Math.max(0,Number(candidate.stats?.[key])||0));
+  state=next;saveState();render();notify("Configurações importadas.");
+ }catch(e){notify("Não foi possível importar: arquivo inválido.");}
+ $("importFile").value="";
+}
+function runSelfTest(){
+ const cases=[
+  classify("pagead.doubleclick.net").kind==="blocked",
+  classify("notdoubleclick.net").kind==="unknown"||classify("notdoubleclick.net").kind==="blocked"===false,
+  normalizeDomain("https://example.com/path") === "example.com",
+  classify("dominio-invalido").kind==="invalid",
+  state.allows.every(x=>typeof x==="string")
+ ];
+ const passed=cases.filter(Boolean).length;
+ notify("Autoteste local: "+passed+"/"+cases.length+" verificações passaram.");
+}
+$("enabled").addEventListener("change",e=>{state.enabled=e.target.checked;saveState();render();});
+$("catAds").addEventListener("change",e=>{state.categories.ads=e.target.checked;saveState();render();notify("Categoria de publicidade atualizada.");});
+$("catTrackers").addEventListener("change",e=>{state.categories.trackers=e.target.checked;saveState();render();notify("Categoria de rastreamento atualizada.");});
+$("toggleMaster").addEventListener("click",()=>{state.enabled=!state.enabled;saveState();render();notify(state.enabled?"Regras ativadas.":"Regras pausadas.");});
+$("addBlock").addEventListener("click",()=>addRule("block",$("newBlockDomain").value));
+$("addAllow").addEventListener("click",()=>addRule("allow",$("newAllowDomain").value));
+$("newBlockDomain").addEventListener("keydown",e=>{if(e.key==="Enter")addRule("block",e.target.value);});
+$("newAllowDomain").addEventListener("keydown",e=>{if(e.key==="Enter")addRule("allow",e.target.value);});
+$("testDomain").addEventListener("click",runDomainTest);
+$("domainInput").addEventListener("keydown",e=>{if(e.key==="Enter")runDomainTest();});
+$("blockSearch").addEventListener("input",()=>renderList("block"));
+$("allowSearch").addEventListener("input",()=>renderList("allow"));
+$("exportData").addEventListener("click",exportData);
+$("importButton").addEventListener("click",()=>$("importFile").click());
+$("importFile").addEventListener("change",e=>{if(e.target.files&&e.target.files[0])importData(e.target.files[0]);});
+$("resetStats").addEventListener("click",()=>{state.stats={tests:0,matches:0,allowed:0,unknown:0};state.lastResult=null;saveState();render();notify("Estatísticas zeradas.");});
+$("resetAll").addEventListener("click",()=>{if(!confirm("Restaurar as listas e preferências padrão? Suas regras personalizadas serão apagadas."))return;state=clone(DEFAULT_STATE);saveState();render();$("testResult").className="result";$("domainInput").value="";notify("Padrões restaurados.");});
+document.querySelectorAll(".nav a").forEach(link=>link.addEventListener("click",()=>{document.querySelectorAll(".nav a").forEach(x=>x.classList.remove("active"));link.classList.add("active");}));
+render();
 })();
 </script>
 </body>
