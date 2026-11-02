@@ -1,4 +1,4 @@
-name: DoramaBlock Android build
+name: DoramaBlock Android build and VPN test
 
 on:
   push:
@@ -43,6 +43,17 @@ jobs:
       - name: Build debug APK
         working-directory: doramablock/android
         run: gradle assembleDebug
+
+      - name: Run live VPN DNS integration test on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          disable-animations: true
+          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot-save
+          script: cd doramablock/android && gradle connectedDebugAndroidTest
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
