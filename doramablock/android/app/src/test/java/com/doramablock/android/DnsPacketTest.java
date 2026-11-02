@@ -41,8 +41,7 @@ public class DnsPacketTest {
     @Test
     public void rejectsNonDnsDestinationPort() {
         byte[] packet = ipv4DnsPacket();
-        packet[23] = 0x35;
-        packet[22] = 0x00;
+        packet[23] = 0x36;
         assertFalse(DnsPacket.isIpv4UdpDnsQuery(packet, packet.length));
     }
 
